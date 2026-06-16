@@ -118,3 +118,59 @@ footer a {
   color: var(--gold);
   text-decoration: none;
 }
+
+.piano-widget {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 20px auto;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.controls {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Keyboard Container */
+.keyboard {
+  display: flex;
+  position: relative;
+  background: #000;
+  padding: 5px;
+  border-radius: 4px;
+  height: 150px;
+}
+
+/* White Keys */
+.key {
+  background: white;
+  border: 1px solid #ccc;
+  flex: 1;
+  height: 100%;
+  border-radius: 0 0 4px 4px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Black Keys */
+.key.black {
+  background: #222;
+  border: none;
+  height: 60%;
+  /* Math to position black keys perfectly between white keys */
+  margin-left: -3%;
+  margin-right: -3%;
+  z-index: 2;
+}
+
+/* Visual states for active chord notes */
+.key.active {
+  background: #3498db !important; /* Blue for the chord notes */
+}
+.key.root-active {
+  background: #e74c3c !important; /* Red for the Root note specifically */
+}
