@@ -17,12 +17,71 @@
     <h3>Piano Chord Visualizer</h3>
     
     <div class="controls">
-      <label for="root-slider">Root Note: <span id="root-label">C</span></label>
-      <input type="range" id="root-slider" min="0" max="11" value="0">
+      <label for="root-slider">Root Note: <span id="root-label">C</span></label><br>
+      <input type="range" id="root-slider" min="0" max="11" value="0" style="width: 100%; margin-top: 10px;">
     </div>
   
     <div class="keyboard" id="keyboard"></div>
   </div>
+  
+  <style>
+  .piano-widget {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .controls {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  /* The keyboard box must have a set height, or it disappears */
+  .keyboard {
+    display: flex;
+    background: #222;
+    padding: 5px;
+    border-radius: 4px;
+    height: 160px; /* Forces it to be visible */
+    position: relative;
+  }
+  
+  /* White Keys */
+  .key {
+    background: white;
+    border: 1px solid #aaa;
+    border-radius: 0 0 4px 4px;
+    height: 100%;
+    flex: 1;
+    z-index: 1;
+    box-sizing: border-box;
+  }
+  
+  /* Black Keys */
+  .key.black {
+    background: #000;
+    height: 60%;
+    max-width: 25px;
+    min-width: 15px;
+    /* This prevents them from ruining the white key alignment */
+    margin-left: -10px;
+    margin-right: -10px;
+    z-index: 2;
+  }
+  
+  /* Active chord note colors */
+  .key.active {
+    background: #3498db !important; /* Blue */
+  }
+  .key.root-active {
+    background: #e74c3c !important; /* Red */
+  }
+  </style>
 
   <div class="voicing">1 · 3 · 5</div>
 
