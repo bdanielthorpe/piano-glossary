@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piano Decoded — Harmony Glossary</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap');
+
+    :root {
+      --bg: #1a1610;
+      --surface: #232018;
+      --border: #3a3428;
+      --gold: #c9a84c;
+      --gold-dim: #7a6330;
+      --text: #e8e0d0;
+      --text-dim: #8a8070;
+      --link: #c9a84c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      padding: 2rem 1.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .site-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.4rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .intro {
+      margin-top: 1rem;
+      color: var(--text-dim);
+      font-size: 0.95rem;
+    }
+
+    .concept-list {
+      list-style: none;
+    }
+
+    .concept-list li {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .concept-list a {
+      display: block;
+      padding: 1rem 0;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.15s;
+    }
+
+    .concept-list a:hover {
+      color: var(--gold);
+    }
+
+    .concept-list a::after {
+      content: '→';
+      color: var(--gold-dim);
+      font-size: 0.9rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      margin-left: 0.75rem;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-name">Piano Decoded</div>
+    <h1>Harmony Glossary</h1>
+    <p class="intro">A reference for pianists and producers. Every concept links to its prerequisites — trace the stack as deep as you need.</p>
+  </header>
+
+  <ul class="concept-list">
+    <li><a href="concepts/major-triad.html">Major triad<span class="tag">foundation</span></a></li>
+    <li><a href="concepts/minor-triad.html">Minor triad<span class="tag">foundation</span></a></li>
+    <li><a href="concepts/maj7.html">Major 7th chord</a></li>
+    <li><a href="concepts/min7.html">Minor 7th chord</a></li>
+    <li><a href="concepts/dom7.html">Dominant 7th chord</a></li>
+    <li><a href="concepts/maj7-sharp11.html">maj7♯11</a></li>
+  </ul>
+
+  <footer>
+    By <a href="https://youtube.com/@pianodecoded" target="_blank">Piano Decoded</a> · <a href="https://pianodecoded.substack.com" target="_blank">Newsletter</a>
+  </footer>
+</body>
+</html>
