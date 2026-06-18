@@ -223,3 +223,19 @@ footer a {
   color: var(--gold);
   text-decoration: none;
 }
+
+.prereqs a {
+  display: block;      /* Forces each link onto its own line */
+  margin-top: 0.5rem;  /* Adds a little space between the links */
+  color: var(--gold);  /* Keeps it matching your existing palette */
+  text-decoration: none;
+}
+
+.prereqs a:hover {
+  text-decoration: underline; /* Optional: gives a nice hover cue */
+}
+
+.voicing {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
