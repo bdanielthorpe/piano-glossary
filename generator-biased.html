@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Random Chords</title>
+<style>
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh}
+#container{text-align:center}
+.reel{width:220px;height:180px;overflow:hidden;margin:20px;border:2px solid #555;border-radius:10px;position:relative}
+.track{position:absolute;width:100%;top:0}
+.item{height:36px;line-height:36px;font-size:30px;color:#555;letter-spacing:1px}
+.item.near{color:#999}.item.selected{color:#fff;font-weight:700;transform:scale(1.15);text-shadow:0 0 10px rgba(255,255,255,.6)}
+button{margin-top:30px;font-size:28px;padding:10px 40px}
+</style>
+</head>
+<body>
+<div id="container">
+<div style="display:flex;gap:40px;justify-content:center;">
+<div class="reel" id="left"><div class="track"></div></div>
+<div class="reel" id="right"><div class="track"></div></div>
+</div>
+<button onclick="spinBoth()">SPIN</button>
+</div>
+<script>
+const roots=["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
+const qualities=[
+{name:"maj",weight:10},{name:"m",weight:10},{name:"7",weight:8},
+{name:"maj7",weight:8},{name:"m7",weight:8},{name:"9",weight:3},
+{name:"m9",weight:3},{name:"maj9",weight:3},{name:"13",weight:2},
+{name:"maj13",weight:2},{name:"m11",weight:2},{name:"sus2",weight:2},
+{name:"sus4",weight:2},{name:"dim",weight:1},{name:"dim7",weight:1},
+{name:"aug",weight:1},{name:"aug7",weight:1}
+];
+const intervals=[[1,1],[3,3],[4,4],[5,4],[7,4],[8,1],[9,3],[2,1],[10,1],[6,1],[11,1],[0,1]];
+function weightedChoice(items){
+ let total=items.reduce((t,x)=>t+(x.weight??x[1]),0);
+ let r=Math.random()*total;
+ for(const it of items){
+   const w=it.weight??it[1];
+   r-=w;
+   if(r<=0) return it.name??it[0];
+ }
+}
+function randomRoot(){return roots[Math.floor(Math.random()*12)]}
+function shift(root,s){return roots[(roots.indexOf(root)+s)%12]}
+function randomChord(root=randomRoot()){
+ return root+weightedChoice(qualities);
+}
+function relatedChord(ch){
+ const m=ch.match(/^([A-G](?:b)?)(.*)$/);
+ const newRoot=shift(m[1],weightedChoice(intervals));
+ return newRoot+weightedChoice(qualities);
+}
+function build(id,winner){
+ const track=document.querySelector("#"+id+" .track");
+ track.innerHTML="";
+ for(let i=0;i<120;i++){
+   const d=document.createElement("div");
+   d.className="item";
+   d.innerHTML=(i===90)?winner:randomChord();
+   track.appendChild(d);
+ }
+}
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+function spin(id,winner){
+ build(id,winner);
+ const track=document.querySelector("#"+id+" .track");
+ const items=[...track.children];
+ const stop=90,itemHeight=36,targetY=-(stop*itemHeight)+72;
+ let st=null;
+ function anim(ts){
+   if(!st)st=ts;
+   let p=Math.min((ts-st)/1800,1);
+   track.style.transform=`translateY(${targetY*easeOutCubic(p)}px)`;
+   if(p<1)requestAnimationFrame(anim);
+   else{
+     items.forEach(e=>e.className="item");
+     items[stop].classList.add("selected");
+     items[stop-1].classList.add("near");
+     items[stop+1].classList.add("near");
+   }
+ }
+ requestAnimationFrame(anim);
+}
+function spinBoth(){
+ const left=randomChord();
+ const right=relatedChord(left);
+ spin("left",left);
+ spin("right",right);
+}
+document.body.onkeydown=e=>{if(e.code==="Space"){e.preventDefault();spinBoth();}}
+spinBoth();
+</script>
+</body>
+</html>
