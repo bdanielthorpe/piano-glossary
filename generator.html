@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Random Chords</title>
+
+<style>
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#container {
+    text-align: center;
+}
+
+#chords {
+    font-size: 4rem;
+    margin-bottom: 40px;
+    line-height: 1.4;
+}
+
+button {
+    font-size: 2rem;
+    padding: 15px 40px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+    <style>
+    body{
+        margin:0;
+        background:#111;
+        color:white;
+        font-family:Arial,sans-serif;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+    }
+    
+    #container{
+        text-align:center;
+    }
+    
+    .reel{
+        width:220px;
+        height:180px;
+        overflow:hidden;
+        margin:20px auto;
+        border:2px solid #555;
+        border-radius:10px;
+        position:relative;
+    }
+    
+    .track{
+        position:absolute;
+        width:100%;
+        top:0;
+        transition:transform 2s cubic-bezier(.15,.8,.25,1);
+    }
+    
+    .item{
+        height:36px;
+        line-height:36px;
+        font-size:30px;
+        letter-spacing: 1px;
+        font-variant-numeric: tabular-nums;
+        color:#555;
+        /* transition: color 0.15s ease; */
+    }
+
+    .item.near{
+        color:#999;
+    }
+    
+    /* .item.selected{
+        color:white;
+        font-size:36px;
+        font-weight:bold;
+    } */
+
+    .item.selected{
+        color:white;
+        font-weight:700;
+        transform: scale(1.15);
+        transition: transform 0.15s ease, color 0.15s ease;
+        text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+    
+    #result{
+        margin-top:30px;
+        font-size:48px;
+        font-weight:bold;
+    }
+    
+    button{
+        margin-top:30px;
+        font-size:28px;
+        padding:10px 40px;
+    }
+    </style>
+    
+    <div id="container">
+
+        <div style="display:flex;gap:40px;justify-content:center;">
+    
+            <div class="reel" id="left">
+                <div class="track"></div>
+            </div>
+    
+            <div class="reel" id="right">
+                <div class="track"></div>
+            </div>
+    
+        </div>
+    
+        <button onclick="spinBoth()">SPIN</button>
+    
+    </div>
+
+    <script>
+const roots = [
+    "C","Db","D","Eb","E","F",
+    "Gb","G","Ab","A","Bb","B"
+];
+
+const qualities = [
+    {name:"maj",      weight:10},
+    {name:"m",     weight:10},
+    {name:"7",     weight:8},
+    {name:"maj7",  weight:8},
+    {name:"m7",    weight:8},
+    {name:"9",     weight:3},
+    {name:"m9",     weight:3},
+    {name:"maj9",     weight:3},
+    {name:"13",    weight:2},
+    {name:"maj13",    weight:2},
+    {name:"m11",    weight:2},
+    {name:"sus2",  weight:2},
+    {name:"sus4",  weight:2},
+    {name:"dim",   weight:1},
+    {name:"dim7",   weight:1},
+    {name:"aug",   weight:1},
+    {name:"aug7",   weight:1}
+];
+
+function weightedChoice(items){
+
+    const total = items.reduce((t,x)=>t+x.weight,0);
+
+    let r = Math.random()*total;
+
+    for(const item of items){
+
+        r -= item.weight;
+
+        if(r <= 0)
+            return item.name;
+
+    }
+
+    return items[0].name;
+
+}
+
+function randomChord(){
+
+    const root = roots[Math.floor(Math.random()*roots.length)];
+    return root + weightedChoice(qualities);
+
+}
+
+function build(id){
+
+    const track = document.querySelector("#"+id+" .track");
+
+    track.innerHTML = "";
+
+    // Build a fresh reel every spin
+    for(let i=0;i<120;i++){
+
+        const d = document.createElement("div");
+
+        d.className = "item";
+        d.innerHTML = randomChord();
+
+        track.appendChild(d);
+
+    }
+
+}
+
+function easeOutCubic(t){
+    return 1 - Math.pow(1 - t, 3);
+}
+
+function spin(id){
+
+    build(id);
+
+    const track = document.querySelector("#"+id+" .track");
+    const items = [...track.children];
+
+    const stop = 80 + Math.floor(Math.random()*20);
+
+    const itemHeight = 36;
+    const targetY = -(stop * itemHeight) + 72;
+
+    const startY = 0;
+    const duration = 1800; // base spin time
+
+    let startTime = null;
+
+    track.style.transition = "none";
+    track.style.transform = "translateY(0px)";
+
+    track.offsetHeight; // force reflow
+
+    function animate(t){
+
+        if(!startTime) startTime = t;
+
+        let p = (t - startTime) / duration;
+
+        if(p > 1) p = 1;
+
+        // easing gives fast start, slow end
+        const eased = easeOutCubic(p);
+
+        const y = startY + (targetY - startY) * eased;
+
+        track.style.transform = `translateY(${y}px)`;
+
+        if(p < 1){
+            requestAnimationFrame(animate);
+        } else {
+
+            // final snap (important for “casino feel”)
+            track.style.transform = `translateY(${targetY}px)`;
+
+            items.forEach(e => e.className = "item");
+
+            items[stop].classList.add("selected");
+
+            if(stop > 0) items[stop-1].classList.add("near");
+            if(stop < items.length-1) items[stop+1].classList.add("near");
+
+        }
+    }
+
+    requestAnimationFrame(animate);
+
+    return items[stop].innerText;
+}
+
+function spinBoth(){
+
+    let left,right;
+
+    do{
+
+        left = spin("left");
+        right = spin("right");
+
+    }while(left===right);
+
+}
+
+document.body.onkeydown = e => {
+
+    if(e.code==="Space"){
+
+        spinBoth();
+        e.preventDefault();
+
+    }
+
+};
+
+// Initial spin
+spinBoth();
+    </script>
+    
+</body>
+</html>
