@@ -31,7 +31,7 @@ const qualities=[
 {name:"sus4",weight:2},{name:"dim",weight:1},{name:"dim7",weight:1},
 {name:"aug",weight:1},{name:"aug7",weight:1}
 ];
-const intervals=[[1,1],[3,3],[4,4],[5,4],[7,4],[8,1],[9,3],[2,1],[10,1],[6,1],[11,1],[0,1]];
+const intervals=[[1,1],[3,3],[4,3],[5,3],[7,3],[9,3],[2,1],[10,1],[6,1],[11,1],[0,1]];
 function weightedChoice(items){
  let total=items.reduce((t,x)=>t+(x.weight??x[1]),0);
  let r=Math.random()*total;
